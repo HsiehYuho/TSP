@@ -1,3 +1,4 @@
-TSP_Local.iml
+TSP.iml
 out/*
-
+.idea/*
+*.class
