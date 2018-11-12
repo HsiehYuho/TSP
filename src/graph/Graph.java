@@ -2,6 +2,7 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author Yu-Ho Hsieh
@@ -16,6 +17,7 @@ public class Graph {
     // For input
     private int size;
     private int[][] matrix;
+    private PriorityQueue<Edge> edgeList;
 
     // For exact result
     private int currentBestCost;
@@ -25,9 +27,10 @@ public class Graph {
     private List<Double> timeStamps;
     private List<Integer> approxCosts;
 
-    public Graph(int size, int[][] matrix){
+    public Graph(int size, int[][] matrix, PriorityQueue<Edge> edgeList){
         this.size = size;
         this.matrix = matrix;
+        this.edgeList = edgeList;
         this.timeStamps = new ArrayList<>();
         this.approxCosts = new ArrayList<>();
     }
@@ -37,9 +40,27 @@ public class Graph {
         this.currentBestRoutes = routes;
     }
 
+    public int getSize() {
+    	return this.size;
+    }
+    
     public int[][] getMatrix(){
         return this.matrix;
     }
+    
+    public PriorityQueue<Edge> getEdgeList(){
+    	return this.edgeList;
+    }
+    
+    public void printEdges() {
+    	PriorityQueue<Edge> copy = edgeList;
+    	Edge cur = copy.poll();
+    	while (cur != null) {
+    		System.out.println(cur.toString());
+    		cur = copy.poll();
+    	}
+    }
+    
     public void addApproxResult(int approxCost, double timeStamp){
         this.approxCosts.add(approxCost);
         this.timeStamps.add(timeStamp);
