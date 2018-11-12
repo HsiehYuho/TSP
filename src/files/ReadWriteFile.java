@@ -10,6 +10,7 @@
 package files;
 
 import graph.Graph;
+import graph.Edge;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,6 +32,7 @@ public class ReadWriteFile {
         String fileType = "";
         List<Coord> coords = new ArrayList<>();
         int[][] matrix = null;
+        PriorityQueue<Edge> edgeList = null;
 
         // Open the file
         BufferedReader br = new BufferedReader(new FileReader(filePath));
@@ -50,6 +52,8 @@ public class ReadWriteFile {
                 else if(line.toUpperCase().startsWith(DIMENSION)){
                     int size = Integer.valueOf(line.substring(line.indexOf(":")+1).trim());
                     matrix = new int[size][size];
+                    edgeList = new PriorityQueue<Edge>(size*(size-1)/2);
+                    	// Number of unique edges in a complete graph with n nodes = n*(n-1)/2
 
                 }
                 else if(line.toUpperCase().startsWith(EDGE_WEIGHT_TYPE)){
@@ -88,9 +92,11 @@ public class ReadWriteFile {
                 }
             }
         }
+        
+        br.close();
 
         // Condition check
-        if(matrix == null || coords.size() == 0){
+        if(matrix == null || edgeList == null || coords.size() == 0){
             throw new RuntimeException("No dimension or nodes found");
         }
 
@@ -123,10 +129,13 @@ public class ReadWriteFile {
                     throw new RuntimeException("Unknown file type");
                 }
                 matrix[i][j] = matrix[j][i] = distance;
+                if (j > i) { // Avoids duplicate edges
+                	edgeList.add(new Edge(i, j, distance));	
+                }
             }
         }
 
-        Graph g = new Graph(coords.size(),matrix);
+        Graph g = new Graph(coords.size(),matrix,edgeList);
         return g;
     }
 
