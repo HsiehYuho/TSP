@@ -44,21 +44,34 @@ public class Edge implements Comparable<Edge> {
 	}
 	
 	/**
-	 * Return the weight/cost of an edge
-	 * @param e the edge
-	 * @return the integer cost of the edge
+	 * Get the first end node of this edge
+	 * @return x
 	 */
-	public int getCost(Edge e) {
-		return e.cost;
+	public int getNode1() {
+		return this.x;
+	}
+	 /**
+	  * Get the second end node of this edge
+	  * @return y
+	  */
+	public int getNode2() {
+		return this.y;
 	}
 	
 	/**
-	 * Summarize the attributes of an edge into a printable string
-	 * @param e the edge
-	 * @return a String of the format "node1~node2 cost"
+	 * Get the weight/cost of this edge
+	 * @return the integer cost of this edge
+	 */
+	public int getCost() {
+		return this.cost;
+	}
+	
+	/**
+	 * Summarize the attributes of this edge into a printable string
+	 * @return a String of the format "node1--node2 cost"
 	 */
 	@Override
 	public String toString() {
-		return String.format("%d~%d %d", this.x, this.y, this.cost);
+		return String.format("%d--%d %d", this.x, this.y, this.cost);
 	}
 }
