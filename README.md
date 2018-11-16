@@ -77,7 +77,13 @@ java Main -inst ../data/Cincinnati.tsp -alg BnB -time 1
 * Please remember to use the following two APIs to update solution when you find out new better solution. 
 
 ```
-graph.addApproxResult(int apporxCost, double timeStamp)) 
+// timeStamp is the second from the program start till now
+// Ex: approxCost = 13155, timeStamp = 110
+// Means after runngin 110 seconds, the algorithm found a route cost 13155
+graph.addApproxResult(int apporxCost, double timeStamp))  
+
+// The routes always start from "0", ex "0->1->5->4->3->2"
+// The routes should be UNIQUE ID sequence, do not have to go back to 0
 graph.setCurrentBestResult(int cost, List<Integer> routes) // routes.size() may not = # of nodes
 ```
 
