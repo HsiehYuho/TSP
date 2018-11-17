@@ -24,21 +24,21 @@ public class Bnb {
 
         // curSec = (double)System.currentTimeMillis()/1000.0;
         //}
-        calculate(g);
+        calculateMulti(g);
         return g;
     }
 
     // During your computation, please call g.addApproxResult(apporxCost, timeStamp)) once you find a better cost
     // Also, please use g.setCurrentBestResult(int cost, List<Integer> routes) to update the solution
 
-    private static void calculate(Graph g){
+    private static void calculateMulti(Graph g){
         int[][] matrix = g.getMatrix();
 
         // For test
 //        int max = Integer.MAX_VALUE;
-//        int[][] matrix = {{max,5,3,2},{5,max,1,4},{3,1,max,4},{2,4,4,max}};
+//        int[][] matrix = {{max,3,9,7},{3,max,6,5},{5,6,max,6},{9,7,4,max}};
 
-        Queue<Node> pq = new PriorityQueue<>((a,b) -> a.getCost() - b.getCost());
+        Queue<Node> pq = new PriorityQueue<>((a, b) -> a.getCost() - b.getCost());
 
         List<Integer> knownBestRoutes = new ArrayList<>();
 
@@ -51,7 +51,8 @@ public class Bnb {
         for(int i = 1; i < matrix.length; i++){
             unvisited.add(i);
         }
-        Node root = new Node(null, 0, 0, matrix, unvisited);
+//        Node root = new NodeMulti(null, 0, 0, matrix, unvisited);
+        Node root = new NodeBinary(null, 0, 0, matrix, unvisited);
         pq.add(root);
 
         while(pq.size() != 0){
@@ -92,6 +93,17 @@ public class Bnb {
 
         return;
     }
+    private static void calculateBinary(Graph g) {
+        int[][] matrix = g.getMatrix();
+//        int max = Integer.MAX_VALUE;
+//        int[][] matrix = {{max,5,3,2},{5,max,1,4},{3,1,max,4},{2,4,4,max}};
+
+//        Queue<NodeMulti> pq = new PriorityQueue<>((a, b) -> a.getCost() - b.getCost());
+
+
+    }
+
+
 
 
 
