@@ -11,7 +11,7 @@ import java.util.List;
  * Georgia Institute of Technology, Fall 2018
  *
  * CSE6140 Project, Travel Salesman Problem
- * Local search method 1
+ * Local search method 1- 3-opt
  *
  */
 
