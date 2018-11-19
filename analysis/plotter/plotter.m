@@ -2,15 +2,16 @@
 % calculations. It disregards Euclidian vs Geo coordinates and plots on a
 % 2D plane, and does not consider edge weights.
 
-function plotter(cityFile, edgeFile)
+function plotter(cityFile, edgeFile, startInd)
     % city: the name of the .txt file containing coordinates with quotes
     % e.g. 'Atlanta.txt'
     
     % edges: the name of the .txt file containing N edges that you wish to
     % connect, one pair per row separated by a space. direction can be
-    % disregarded e.g. 1 2 is the same as 2 1. you may index these starting
-    % from 0 or 1, the program will take care of this accordingly via user input.
+    % disregarded e.g. 1 2 is the same as 2 1
     % e.g. 'edges_example.txt'
+    
+    % startInd: starting index of your edges file, either 0 or 1
     
     data = load(cityFile);
     edges = load(edgeFile);
@@ -32,7 +33,6 @@ function plotter(cityFile, edgeFile)
     end
     
     data = data(:,2:3); % truncate first column (indices)
-    startInd = input('Does edges.txt begin indexing at 0 or 1?\n Enter 0 or 1.\n');
     if startInd == 0 % city file starts count at 0, shift edges file by +1
         edges = edges + 1;
     end
