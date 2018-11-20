@@ -1,5 +1,6 @@
 import approx.Approx;
 import bnb.Bnb;
+import bnb.Util;
 import ls1.Ls1;
 import ls2.Ls2;
 import files.ReadWriteFile;
@@ -63,7 +64,7 @@ public class Main {
 
         String file = arguments.get(INST);
         String alg = arguments.get(ALG);
-        int cutTime = Integer.valueOf(arguments.get(TIME));
+        int cutTime = Integer.valueOf(arguments.get(TIME)); // in seconds
         int seed = arguments.get(SEED) != null ? Integer.valueOf((arguments.get(SEED))) : 0;
 
         Graph g = ReadWriteFile.readFile(file);
@@ -88,6 +89,28 @@ public class Main {
             }
             default:
                 throw new IllegalArgumentException("alg option does not exist");
+        }
+        // Output log
+        List<Integer> costs = g.getApproxCosts();
+        List<Double> timeStamps = g.getTimeStamps();
+
+        for(int i = 0; i < costs.size(); i++){
+            int cost = costs.get(i);
+            double timeStamp = timeStamps.get(i);
+            System.out.printf("At time: %.2f found cost %d \n", timeStamp, cost);
+        }
+
+        // Output current best result
+        int knownBestCost = g.getCurrentBestCost();
+        List<Integer> knownBestRoutes = g.getCurrentBestRoutes();
+        if(knownBestCost != Integer.MAX_VALUE){
+            System.out.println("Known best cost: " + knownBestCost);
+        }
+        else{
+            System.out.println("Did not find any route");
+        }
+        for(int i : knownBestRoutes){
+            System.out.print(i + "\t");
         }
     }
 
