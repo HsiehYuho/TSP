@@ -87,3 +87,10 @@ graph.addApproxResult(int apporxCost, double timeStamp))
 graph.setCurrentBestResult(int cost, List<Integer> routes) // routes.size() may not = # of nodes
 ```
 
+## Related Links for Analysis and Report Generation
+* Overleaf/LaTex: https://www.overleaf.com/4622789921hhfkchdhmhdd
+* LaTeX table generator: https://www.tablesgenerator.com
+    * See downloadable file under analysis
+* Sample TSP files and solutions from U of Waterloo: http://www.math.uwaterloo.ca/tsp/world/countries.html
+* Additional sample TSP files and solutions: http://elib.zib.de/pub/mp-testdata/tsp/tsplib/stsp-sol.html
+* Raw data Google spreadsheet: https://docs.google.com/spreadsheets/d/1LSfLjVvHYG1H_9V1zsPS1FUmDeIfpaEw54vEjBwoXCA/edit?usp=sharing
