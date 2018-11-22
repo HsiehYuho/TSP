@@ -21,7 +21,7 @@ public class Graph {
 
     // For exact result
     private int currentBestCost;
-    private List<Integer> currentBestRoutes; // Route <0,1,5,2,7,6,4,3>, please contains UNIQUE ID sequence, no duplicate!!
+    private List<Integer> currentBestRoutes; // Route <0,1,5,2,7,6,4,3,0>, please go BACK to the origin point
 
     // For approximation result
     private List<Double> timeStamps;
@@ -35,8 +35,8 @@ public class Graph {
         this.approxCosts = new ArrayList<>();
     }
 
-    // Example <0,1,5,2,7,6,4,3>
-    // Please only contains UNIQUE ID sequence, no duplicate
+    // Example <0,1,5,2,7,6,4,3,0>
+    // Please go Back to the origin point
     public void setCurrentBestResult(int cost, List<Integer> routes){
         this.currentBestCost = cost;
         this.currentBestRoutes = routes;
