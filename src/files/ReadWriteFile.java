@@ -147,4 +147,8 @@ public class ReadWriteFile {
         return;
     }
 
+    public static void writeFile(){
+
+    }
+
 }
