@@ -20,7 +20,7 @@ public class Ls1 {
     {
   int[][] Matrix = g.getMatrix();
         int cityCount = g.getMatrix().length;
-        InitialRouteUtils.createRandomRoute(g, seed);
+        createRandomRoute(g, seed);
 
 
         List<Integer> alternateRoute = new ArrayList<>();
