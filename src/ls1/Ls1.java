@@ -1,24 +1,25 @@
 package ls1;
 
+import utils.GraphUtils;
 import utils.InitialRouteUtils;
 import graph.Graph;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
+import java.time.*;
 
 /**
  * @author Roddick
  * Georgia Institute of Technology, Fall 2018
  *
  * CSE6140 Project, Travel Salesman Problem
- * Local search method 1- 3-opt
+ * Local search method 1
  *
  */
 
+
 public class Ls1 {
-   public static Graph compute(Graph g, int cutTime, int seed)
-    {
-  int[][] Matrix = g.getMatrix();
+    public static Graph compute(Graph g, int cutTime, int seed) {
+        int[][] Matrix = g.getMatrix();
         int cityCount = g.getMatrix().length;
         createRandomRoute(g, seed);
 
@@ -27,7 +28,7 @@ public class Ls1 {
         List<Integer> Best_Route = new ArrayList<>();
         Best_Route = g.getCurrentBestRoutes();
         int BestCost = g.getCurrentBestCost();//keep being updated in for loop
-
+        int Current_Cost = g.getCurrentBestCost();
 
         Random rand = new Random();
         int reset_seed = seed;
@@ -35,8 +36,16 @@ public class Ls1 {
         System.out.println(Best_Route);
         System.out.println(BestCost);
 
+        //List<Integer> alternateRoute = Get_result_threeOpt(g, 4, 8, 11);
+
+        //System.out.println(alternateRoute);
+
+
+        //while(count<10000)
+
         long startTime = System.currentTimeMillis();
         int count = 0;
+        int flag = 0;
 
         while ((System.currentTimeMillis() - startTime) / 1000 < cutTime)
         //while(count<1)
@@ -60,35 +69,62 @@ public class Ls1 {
                             alternateRoute.remove(cityCount + 1);
                             Best_Route.clear();
                             Best_Route.addAll(alternateRoute);
-                            seed_num = reset_seed;
+                            //seed_num = reset_seed;
+                           //flag = 1;
                             //System.out.println("Seed " + reset_seed);
+                            g.setCurrentBestResult(BestCost, Best_Route);
+                            // System.out.println("FLAG:" + flag +"," +"Cost:"+BestCost);
+
 
                         }
 
 
-                    }
+                    }//
+
+                    /*
+                    if (flag == 1) {
+                        break;
+                    }*/
+
                 }
-
+                  /*
+                if (flag == 1) {
+                    break;
+                }*/
             }
-                reset_seed = rand.nextInt();
-                InitialRouteUtils.createRandomRoute(g, reset_seed);
-                count++;
 
+
+            if (Current_Cost==BestCost)
+            {
+                reset_seed = rand.nextInt();
+                createRandomRoute(g, reset_seed);
+                Current_Cost=BestCost;
+            }
 
         }
+        //reset_seed = rand.nextInt();
 
-            long endtime = 0;
+
+        //flag = 0;
+        // count++;
+        long endtime = 0;
 
 
-            endtime = (System.currentTimeMillis() - startTime);
-            System.out.println("Required_time" + endtime);
-            System.out.println("Seed " + seed_num);
-            System.out.println("Best cost " + BestCost);
-            System.out.println("Route: " + Best_Route);
+        endtime =(System.currentTimeMillis()-startTime);
+        System.out.println("Required_time"+endtime);
+        System.out.println("Seed "+seed);
+        System.out.println("Best cost "+BestCost);
+        System.out.println("Route: "+Best_Route);
 
         return g;
 
+
     }
+
+
+
+
+
     public static Graph createRandomRoute(Graph g, int seed){
         int cityCount = g.getMatrix().length;
         int[][] cityMatrix = g.getMatrix();
@@ -366,7 +402,6 @@ public class Ls1 {
 
         return Best_route;
     }
-
 
 
 }
