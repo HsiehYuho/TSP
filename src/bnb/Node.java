@@ -12,24 +12,8 @@ import java.util.Set;
 
 
 public abstract class Node {
-    private Node parent;
-    private int idx;
-    private int cost;
-    private int[][] matrix;
-    private Set<Integer> unvisited;
-
-//    public Node(Node parent, int idx, int cost, int[][] matrix, Set<Integer> unvisited){
-//        this.parent = parent;
-//        this.idx = idx;
-//        this.cost = cost;
-//        this.matrix = matrix;
-//        this.unvisited = unvisited;
-//    }
-
-
     public abstract Node[] genChildren();
-    public abstract int getCost();
-    public abstract int getIdx();
+    public abstract int getLowerBound();
     public abstract List<Integer> getPath();
-
+    public abstract int getDepth();
 }

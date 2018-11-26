@@ -10,82 +10,101 @@ import java.util.*;
  *
  * CSE6140 Project, Travel Salesman Problem
  * Branch and bound computation method
- *
  */
 
 public class Bnb {
     public static Graph compute(Graph g, int cutTime) {
-        double curSec = (double)System.currentTimeMillis()/1000.0;
-        double stopSec = curSec + cutTime;
-
-        // Set-up cut-off time
-        //while(curSec < stopSec){
-
-
-        // curSec = (double)System.currentTimeMillis()/1000.0;
-        //}
-        calculateMulti(g);
+        calculate(g,cutTime);
         return g;
     }
 
-    // During your computation, please call g.addApproxResult(apporxCost, timeStamp)) once you find a better cost
-    // Also, please use g.setCurrentBestResult(int cost, List<Integer> routes) to update the solution
+    private static void calculate(Graph g, int cutTime){
+        // set up timing
+        double startSec = (double)System.currentTimeMillis()/1000.0;
+        double curSec = startSec;
 
-    private static void calculateMulti(Graph g){
-        int[][] matrix = g.getMatrix();
-
-        // For test
+        // Cuz latter the non-take branch will modify the matrix, so we need to reserve the original one
+        int[][] matrix = Util.cloneMatrix(g.getMatrix());
 //        int max = Integer.MAX_VALUE;
-//        int[][] matrix = {{max,3,9,7},{3,max,6,5},{5,6,max,6},{9,7,4,max}};
+//        int[][] matrix = {{max,20,30,10,11},{15,max,16,4,2},{3,5,max,2,4},{19,6,18,max,3},{16,4,7,16,max}};
 
-        Queue<Node> pq = new PriorityQueue<>((a, b) -> a.getCost() - b.getCost());
+        Queue<Node> pq = new PriorityQueue<>((a, b) -> a.getLowerBound() - b.getLowerBound());
 
+        // For first several levels, we will pick "selected" branch directly, and store others into buffer
+        Stack<Node> buffer = new Stack<>();
+        boolean bufferFlag = false;
         List<Integer> knownBestRoutes = new ArrayList<>();
 
-        // Get the init known best solution cost as lower bound
-        int knownBestCost = Util.findGreedyCost(matrix,knownBestRoutes);
-        g.setCurrentBestResult(knownBestCost, knownBestRoutes);
-        System.out.println("Init best known cost: " + knownBestCost);
+        int knownBestCost = Integer.MAX_VALUE;
 
-        Set<Integer> unvisited = new HashSet<>();
-        for(int i = 1; i < matrix.length; i++){
-            unvisited.add(i);
-        }
-//        Node root = new NodeMulti(null, 0, 0, matrix, unvisited);
-        Node root = new NodeBinary(null, 0, 0, matrix, unvisited);
+        // Get the init known best solution cost as lower bound to optimize the code
+        knownBestCost = Util.findGreedyCost(matrix,knownBestRoutes);
+        g.setCurrentBestResult(knownBestCost, knownBestRoutes);
+
+        // Remove the comment if want to test the multi ways of computation
+        Node root = new NodeBinary(new ArrayList<>(), 0, matrix, matrix.length, 0);
         pq.add(root);
 
-        while(pq.size() != 0){
+        while(pq.size() != 0 && (curSec - startSec) < cutTime){
             Node node = pq.poll();
             Node[] children = node.genChildren();
 
-            // deadend
-            if(children == null){
-                continue;
-            }
-
             // leaf of tree
             if(children.length == 0){
-                if(node.getCost()< knownBestCost){
-                    knownBestCost = node.getCost();
-                    knownBestRoutes = node.getPath();
-                    knownBestRoutes.add(0);
+                List<Integer> path = node.getPath();
+                int cost = utils.GraphUtils.calculateCost(g,path);
+
+                // Best solution
+                if(cost < knownBestCost){
+                    knownBestCost = cost;
+                    knownBestRoutes = path;
+
+                    // Set up record
+                    curSec = (double)System.currentTimeMillis()/1000.0;
+                    g.addApproxResult(knownBestCost,curSec-startSec);
+                    System.out.println("Found one sol");
                 }
             }
             else{
-                for(Node n : children){
-                    if(n.getCost() > knownBestCost){
-                        continue;
+                Node n1 = children[0];
+                Node n2 = children[1];
+
+                // node = null means it is dead end
+                if(n1 != null && n1.getLowerBound() < knownBestCost){
+                    pq.add(n1);
+                }
+                if(n2 != null && n2.getLowerBound() < knownBestCost ){
+                    if(n2.getDepth() > (matrix.length * matrix.length) - 30 || bufferFlag){
+                        pq.add(n2);
+                        if(pq.size() > 10000){
+                            bufferFlag = false;
+                        }
                     }
-                    pq.add(n);
+                    else{
+                        buffer.add(n2);
+                    }
                 }
             }
-        }
 
-        // Validate
-        System.out.println(knownBestCost);
-        for(int i : knownBestRoutes){
-            System.out.print(i + "\t");
+            // update current time
+            curSec = (double)System.currentTimeMillis()/1000.0;
+
+            // if pq is empty, add buffer into pq
+            if(pq.size() == 0 && buffer.size() != 0){
+                for(int i = 0; i < 10 && buffer.size() != 0; i++){
+                    if(buffer.peek().getLowerBound() > knownBestCost){
+                        buffer.pop();
+                        i--;
+                    }
+                    else{
+                        pq.add(buffer.pop());
+                    }
+                }
+                bufferFlag = true;
+            }
+        }
+        if(curSec - startSec > cutTime){
+            System.out.printf("Process is cut off after %.2f secs \n", curSec - startSec);
         }
 
         // Store result into graph
@@ -93,20 +112,5 @@ public class Bnb {
 
         return;
     }
-    private static void calculateBinary(Graph g) {
-        int[][] matrix = g.getMatrix();
-//        int max = Integer.MAX_VALUE;
-//        int[][] matrix = {{max,5,3,2},{5,max,1,4},{3,1,max,4},{2,4,4,max}};
-
-//        Queue<NodeMulti> pq = new PriorityQueue<>((a, b) -> a.getCost() - b.getCost());
-
-
-    }
-
-
-
-
-
-
 
 }

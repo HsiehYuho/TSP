@@ -103,7 +103,7 @@ public class Util {
     }
 
     // Update the corresponding cols and rows in matrix to infinite
-    public static void updateMatrix(int[][] matrix, int sourceCity, int targetCity){
+    public static void updateMatrix(int[][] matrix, int sourceCity, int targetCity, List<int[]> routes){
         int size = matrix.length;
         for(int i = 0; i < size; i++){
             matrix[sourceCity][i] = Integer.MAX_VALUE;
@@ -111,8 +111,56 @@ public class Util {
         }
 
         // Avoid leaving unvisited cities, from(having nodes from 1~ 4, 1->2->3->1, assign 3->1 = MAX_VALUE)
-        matrix[targetCity][0] = Integer.MAX_VALUE;
+        // Update the from and to to connect with the previous routes
+        boolean update = true;
+        while(update){
+            update = false;
+            for(int[] route : routes){
+                if(sourceCity == route[1]){
+                    sourceCity = route[0];
+                    update = true;
+                }
+                if(targetCity == route[0]){
+                    targetCity = route[1];
+                    update = true;
+                }
+            }
+        }
+
+        matrix[targetCity][sourceCity] = Integer.MAX_VALUE;
+        // matrix[targetCity][0] = Integer.MAX_VALUE;
     }
+
+    // Pick the edge which second cost can increase lower bound the most
+    public static int[] selectEdge(int[][] matrix){
+        int selectRow = -1, selectCol = -1;
+        int secondMin = -1;
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[0].length; j++){
+                if(matrix[i][j] == 0){
+                    int secondMinRow = Integer.MAX_VALUE;
+                    int secondMinCol = Integer.MAX_VALUE;
+                    for(int k = 0; k < matrix.length; k++){
+                        if(k != j && matrix[i][k] != Integer.MAX_VALUE){
+                            secondMinRow = secondMinRow > matrix[i][k] ? matrix[i][k] : secondMinRow;
+                        }
+                        if(k != i && matrix[k][j] != Integer.MAX_VALUE){
+                            secondMinCol = secondMinCol > matrix[k][j] ? matrix[k][j] : secondMinCol;
+                        }
+                    }
+                    secondMinRow = secondMinRow == Integer.MAX_VALUE ? 0 : secondMinRow;
+                    secondMinCol = secondMinCol == Integer.MAX_VALUE ? 0 : secondMinCol;
+                    if((selectCol == -1 && selectRow == -1) || secondMin < secondMinRow + secondMinCol){
+                        secondMin = secondMinRow + secondMinCol;
+                        selectRow = i;
+                        selectCol = j;
+                    }
+                }
+            }
+        }
+        return new int[]{selectRow,selectCol};
+    }
+
 
     // Debug
     public static void printMatrix(int[][] matrix){
@@ -128,6 +176,16 @@ public class Util {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public static boolean checkMatrix(int[][] matrix){
+        for(int[] row : matrix){
+            for(int n : row){
+                if(n != Integer.MAX_VALUE)
+                    return false;
+            }
+        }
+        return true;
     }
 
 }
