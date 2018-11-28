@@ -5,7 +5,6 @@ import ls2.Ls2;
 import files.ReadWriteFile;
 import graph.Graph;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -113,46 +112,7 @@ public class Main {
         files.ReadWriteFile.deleteFileIfExist(solFile);
         files.ReadWriteFile.deleteFileIfExist(traceFile);
 
-        File sol = new File(solFile);
-        File trace = new File(traceFile);
-
-        PrintWriter solPw = new PrintWriter(sol);
-        PrintWriter tracePw = new PrintWriter(trace);
-
-        List<Integer> costs = g.getApproxCosts();
-        List<Double> timeStamps = g.getTimeStamps();
-
-
-        for(int i = 0; i < costs.size(); i++){
-            int cost = costs.get(i);
-            double timeStamp = timeStamps.get(i);
-            tracePw.printf("%.2f, %d \n", timeStamp, cost);
-            System.out.printf("At time %.2f, found cost %d \n",timeStamp, cost);
-        }
-
-        // Output current best result
-        int knownBestCost = g.getCurrentBestCost();
-        List<Integer> knownBestRoutes = g.getCurrentBestRoutes();
-        if(knownBestCost != Integer.MAX_VALUE){
-            solPw.println(knownBestCost);
-            System.out.printf("Best known cost: %d \n", knownBestCost);
-        }
-        else{
-            solPw.println("Did not find any route");
-            System.out.printf("Cannot find any cost \n");
-
-        }
-        for(int i = 0; i < knownBestRoutes.size(); i++){
-            int id = knownBestRoutes.get(i);
-            solPw.print(id);
-            if(i != knownBestRoutes.size() - 1){
-                solPw.print(",");
-            }
-            System.out.printf("%d ", id);
-        }
-        System.out.println();
-        solPw.close();
-        tracePw.close();
+        files.ReadWriteFile.writeFile(solFile,traceFile,g);
 
         System.out.println("Done");
     }
