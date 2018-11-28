@@ -53,11 +53,10 @@ Then you should find some .class files appearing in your packages folders and sr
 They are compiled files and can be executed.
 
 
-Then if you run the following command, you should be able to see a distance matrix printed 
-out from the terminal console.
+Then if you run the following command, you should be able to run the program.
 
 ```
-java Main -inst ../data/Cincinnati.tsp -alg BnB -time 1 
+java Main -inst ../data/Cincinnati.tsp -alg BnB -time 600 
 ```
 
 * Please make sure you are in *src* folder. 
@@ -71,8 +70,6 @@ java Main -inst ../data/Cincinnati.tsp -alg BnB -time 1
 
 * Please maintain a public and static function called 
 *compute* in each algorithm. 
-
-* Please maintain a while loop which serves as timer and will cut off when time exceeds cut-off time.
 
 * Please remember to use the following two APIs to update solution when you find out new better solution. 
 
