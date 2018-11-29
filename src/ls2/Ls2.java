@@ -24,7 +24,7 @@ public class Ls2 {
         int difference=0;
         int flag = 0;
         long startTime = System.currentTimeMillis();
-        while((System.currentTimeMillis() - startTime)/1000 < cutTime){
+        while((System.currentTimeMillis() - startTime)/1000 < cutTime && (difference<1000)){
             currentCost = g.getCurrentBestCost();
             for(int j=1; j < cityCount -1; j++ ){
                 for(int k =j+1; k< cityCount; k++){
@@ -44,6 +44,7 @@ public class Ls2 {
             }
             difference++;
         }
+        System.out.println(System.currentTimeMillis() - startTime);
         System.out.println("Proposed Route: " + g.getCurrentBestRoutes());
         System.out.println("Cost: "+ g.getCurrentBestCost());
         return g;
