@@ -55,12 +55,14 @@ public class Graph {
     }
     
     public void printEdges() {
-    	PriorityQueue<Edge> copy = edgeList;
+    	PriorityQueue<Edge> copy = new PriorityQueue<Edge>();
+    	copy.addAll(edgeList);
     	Edge cur = copy.poll();
     	while (cur != null) {
     		System.out.println(cur.toString());
     		cur = copy.poll();
     	}
+    	copy.clear();
     }
     
     public void addApproxResult(int approxCost, double timeStamp){

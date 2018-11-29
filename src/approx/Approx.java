@@ -19,8 +19,10 @@ import java.util.Stack;
  */
 
 public class Approx {
-    public static Graph compute(Graph g, int seed) {
-        // Create Minimum Spanning Tree
+    public static Graph compute(Graph g, int cutTime, int seed) {
+    	long t0 = System.nanoTime();
+    	
+    	// Create Minimum Spanning Tree
     	AdjacencyList<Integer> mst = MST.compute_MST(g, seed);
 //    	mst.print();
     	
@@ -51,8 +53,16 @@ public class Approx {
     	for (int ii = 1; ii < route.size(); ii++) {
     		cost+= g.getMatrix()[route.get(ii-1)][route.get(ii)];
     	}
-    	System.out.println(String.format("Cost: %d", cost));
-    	System.out.println(route);
+    	
+    	long runtime = (System.nanoTime()-t0)/1000000000;
+    	if (runtime <= cutTime) {
+        	g.addApproxResult(cost, runtime); // seconds
+    	}
+    	
+//    	System.out.println(String.format("Cost: %d", cost));
+//    	System.out.println(route);
+    	
+    	g.setCurrentBestResult(cost, route);
     	
 //    	// Obtain subset of odd-degree nodes
 //        List<Integer> odds = new ArrayList<>(g.getSize()); // capacity is n

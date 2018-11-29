@@ -75,7 +75,7 @@ public class Main {
                 break;
             }
             case APPROX: {
-                g = Approx.compute(g, cutTime);
+                g = Approx.compute(g, cutTime, seed);
                 break;
             }
             case LS1: {
