@@ -19,7 +19,7 @@ import java.util.Stack;
  */
 
 public class Approx {
-    public static Graph compute(Graph g, int seed) {
+    public static Graph compute(Graph g, int cutTime, int seed) {
     	long t0 = System.nanoTime();
     	
     	// Create Minimum Spanning Tree
@@ -54,7 +54,11 @@ public class Approx {
     		cost+= g.getMatrix()[route.get(ii-1)][route.get(ii)];
     	}
     	
-    	g.addApproxResult(cost, (System.nanoTime()-t0)/1000000000); // seconds
+    	long runtime = (System.nanoTime()-t0)/1000000000;
+    	if (runtime <= cutTime) {
+        	g.addApproxResult(cost, runtime); // seconds
+    	}
+    	
 //    	System.out.println(String.format("Cost: %d", cost));
 //    	System.out.println(route);
     	
