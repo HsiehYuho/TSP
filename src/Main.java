@@ -106,8 +106,8 @@ public class Main {
         if(seed!= 0){
             outputFile += "_" + seed;
         }
-        String solFile = "./results/" + outputFile + ".sol";
-        String traceFile = "./results/" + outputFile + ".trace";
+        String solFile = "./results/" + alg + "/" + outputFile + ".sol";
+        String traceFile = "./results/" + alg + "/" + outputFile + ".trace";
 
         files.ReadWriteFile.deleteFileIfExist(solFile);
         files.ReadWriteFile.deleteFileIfExist(traceFile);
