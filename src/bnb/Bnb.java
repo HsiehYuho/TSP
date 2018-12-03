@@ -62,7 +62,6 @@ public class Bnb {
                     // Set up record
                     curSec = (double)System.currentTimeMillis()/1000.0;
                     g.addApproxResult(knownBestCost,curSec-startSec);
-                    System.out.println("Found one sol");
                 }
             }
             else{
@@ -91,7 +90,7 @@ public class Bnb {
 
             // if pq is empty, add buffer into pq
             if(pq.size() == 0 && buffer.size() != 0){
-                for(int i = 0; i < 10 && buffer.size() != 0; i++){
+                for(int i = 0; i < 30 && buffer.size() != 0; i++){
                     if(buffer.peek().getLowerBound() > knownBestCost){
                         buffer.pop();
                         i--;
@@ -103,8 +102,12 @@ public class Bnb {
                 bufferFlag = true;
             }
         }
-        if(curSec - startSec > cutTime){
-            System.out.printf("Process is cut off after %.2f secs \n", curSec - startSec);
+
+        if(curSec - startSec >= cutTime){
+            System.out.printf("Cut off: %.2f secs \n", curSec - startSec);
+        }
+        else{
+            System.out.printf("Finish: %.2f secs \n", curSec - startSec);
         }
 
         // Store result into graph

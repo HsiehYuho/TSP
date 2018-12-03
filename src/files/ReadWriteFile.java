@@ -13,6 +13,9 @@ import graph.Graph;
 import graph.Edge;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ReadWriteFile {
@@ -145,9 +148,21 @@ public class ReadWriteFile {
         return;
     }
 
-    public static void writeFile(String solFile, String traceFile, Graph g) throws FileNotFoundException {
+    public static void writeFile(String solFile, String traceFile, Graph g) throws IOException {
+
+        Path solPath = Paths.get(solFile);
+        Path tracePath = Paths.get(traceFile);
+
+        Files.createDirectories(solPath.getParent());
+        Files.createFile(solPath);
+
+        Files.createDirectories(tracePath.getParent());
+        Files.createFile(tracePath);
+
         File sol = new File(solFile);
         File trace = new File(traceFile);
+
+
 
         PrintWriter solPw = new PrintWriter(sol);
         PrintWriter tracePw = new PrintWriter(trace);
