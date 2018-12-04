@@ -194,7 +194,7 @@ public class ReadWriteFile {
         for(int i = 0; i < knownBestRoutes.size() - 1; i++){
             int id = knownBestRoutes.get(i) + 1;
             solPw.print(id);
-            if(i != knownBestRoutes.size() - 1){
+            if(i != knownBestRoutes.size() - 2){
                 solPw.print(",");
             }
             System.out.printf("%d ", id);
