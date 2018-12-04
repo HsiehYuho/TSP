@@ -64,6 +64,12 @@ java Main -inst ../data/Cincinnati.tsp -alg BnB -time 600
 * Please make sure you are in *src* folder. 
 * The output *results* folder should appear under *src* folder.
 
+## Results 
+
+The code itself outputs the files which start from index 1 as requriement of handout. 
+However, in the *results* folder, everything is correct except for the index start from 0. We do not have time to re-run every instance. 
+
+
 ## Compute function structure
 
 -------------
