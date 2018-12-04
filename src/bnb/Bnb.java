@@ -25,8 +25,6 @@ public class Bnb {
 
         // Cuz latter the non-take branch will modify the matrix, so we need to reserve the original one
         int[][] matrix = Util.cloneMatrix(g.getMatrix());
-//        int max = Integer.MAX_VALUE;
-//        int[][] matrix = {{max,20,30,10,11},{15,max,16,4,2},{3,5,max,2,4},{19,6,18,max,3},{16,4,7,16,max}};
 
         Queue<Node> pq = new PriorityQueue<>((a, b) -> a.getLowerBound() - b.getLowerBound());
 
