@@ -18,104 +18,134 @@ import java.time.*;
 
 
 public class Ls1 {
-    public static Graph compute(Graph g, int cutTime, int seed) {
-        int[][] Matrix = g.getMatrix();
-        int cityCount = g.getMatrix().length;
-        createRandomRoute(g, seed);
 
+    public static int Mode=0;
+    public static Graph compute(Graph g, int cutTime, int seed)
+    {
 
-        List<Integer> alternateRoute = new ArrayList<>();
-        List<Integer> Best_Route = new ArrayList<>();
-        Best_Route = g.getCurrentBestRoutes();
-        int BestCost = g.getCurrentBestCost();//keep being updated in for loop
-        int Current_Cost = g.getCurrentBestCost();
-
+        int count=0;
+        int cityCount=g.getMatrix().length;
+        int position_one=0;
+        int position_two=0;
+        int Best_cost= Integer.MAX_VALUE;
+        int Current_cost= 0;
+        List<Integer> Best_route=new ArrayList<>();
         Random rand = new Random();
-        int reset_seed = seed;
-        int seed_num = 0;
-        System.out.println(Best_Route);
-        System.out.println(BestCost);
-
-        //List<Integer> alternateRoute = Get_result_threeOpt(g, 4, 8, 11);
-
-        //System.out.println(alternateRoute);
-
-
-        //while(count<10000)
-
+        int reset_seed=seed;
         long startTime = System.currentTimeMillis();
-        int count = 0;
-        int flag = 0;
-
-        while ((System.currentTimeMillis() - startTime) / 1000 < cutTime)
-        //while(count<1)
+        long duration=0;
+        //while(count<100)
+        while((System.currentTimeMillis()-startTime)/1000<cutTime)
         {
 
-            for (int i = 1; i < cityCount - 2; i++) {
+            //System.out.print("Mode "+Mode);
+            Test_3_opt(g,cutTime,reset_seed);
+            Mode=1;
+            if(Best_cost>g.getCurrentBestCost())
+            {
+              Best_cost=g.getCurrentBestCost();
+              Best_route=new ArrayList<>(g.getCurrentBestRoutes());
+            }
+
+            if(Best_cost==Current_cost) {
+                reset_seed = rand.nextInt();
+                Mode=0;
+            }
+
+            Current_cost=Best_cost;
+            //System.out.println(" BC "+Best_cost); //+ "BR:" + Best_route);
+            count++;
+
+        }
+
+
+
+
+        long endTime = (System.currentTimeMillis()-startTime)/1000;
+        //System.out.println(endTime);
+
+        g.setCurrentBestResult(Best_cost,Best_route);
+        return g;
+
+
+    }
+    public static Graph Test_3_opt(Graph g, int cutTime ,int seed) {
+        int[][] Matrix = g.getMatrix();
+        int cityCount = g.getMatrix().length;
+
+        List<Integer> Best_Route = new ArrayList();
+
+
+
+        int BestCost=0;
+
+        if(Mode==0) {
+            Best_Route = createRandomRoute(g, seed);
+            BestCost =Best_Route.get(cityCount+1);
+            Best_Route.remove(cityCount+1);
+            Mode++;
+        }
+        else
+        {
+            Best_Route=g.getCurrentBestRoutes();
+            BestCost=g.getCurrentBestCost();
+        }
+
+        int Current_cost=BestCost;
+
+
+/*
+
+            Best_Route = createRandomRoute(g, seed);
+
+            int BestCost =Best_Route.get(cityCount+1);//keep being updated in for loop
+            int Current_cost=BestCost;
+            Best_Route.remove(cityCount+1);
+
+*/
+
+        long startTime = System.currentTimeMillis();
+        //int count = 0;
+        //int flag = 0;
+
+
+        for (int i = 1; i < cityCount - 2; i++) {
+            if ((System.currentTimeMillis() - startTime) / 1000 > cutTime) {
+                break;
+            }
+            for (int j = i + 1; j < cityCount - 1; j++) {
                 if ((System.currentTimeMillis() - startTime) / 1000 > cutTime) {
                     break;
                 }
-                for (int j = i + 1; j < cityCount - 1; j++) {
+                for (int k = j + 1; k < cityCount; k++) {
                     if ((System.currentTimeMillis() - startTime) / 1000 > cutTime) {
                         break;
                     }
-                    for (int k = j + 1; k < cityCount; k++) {
-                        if ((System.currentTimeMillis() - startTime) / 1000 > cutTime) {
-                            break;
-                        }
-                        alternateRoute = ThreeOpt(g, BestCost, i, j, k);
-                        if (!(alternateRoute.isEmpty())) {
-                            BestCost = alternateRoute.get(cityCount + 1);
-                            alternateRoute.remove(cityCount + 1);
-                            Best_Route.clear();
-                            Best_Route.addAll(alternateRoute);
-                            //seed_num = reset_seed;
-                           //flag = 1;
-                            //System.out.println("Seed " + reset_seed);
-                            g.setCurrentBestResult(BestCost, Best_Route);
-                            // System.out.println("FLAG:" + flag +"," +"Cost:"+BestCost);
 
 
-                        }
+                    List<Integer> alternateRoute = ThreeOpt(g, Best_Route, Current_cost,BestCost, i, j, k);
+
+                    if (!(alternateRoute.isEmpty())) {
+                        BestCost = alternateRoute.get(cityCount + 1);
+                        alternateRoute.remove(cityCount + 1);
+                        Best_Route.clear();
+                        Best_Route = new ArrayList(alternateRoute);
 
 
-                    }//
 
-                    /*
-                    if (flag == 1) {
-                        break;
-                    }*/
+                    }
+
 
                 }
-                  /*
-                if (flag == 1) {
-                    break;
-                }*/
-            }
 
-
-            if (Current_Cost==BestCost)
-            {
-                reset_seed = rand.nextInt();
-                createRandomRoute(g, reset_seed);
-                Current_Cost=BestCost;
             }
 
         }
-        //reset_seed = rand.nextInt();
 
 
-        //flag = 0;
-        // count++;
-        long endtime = 0;
 
 
-        endtime =(System.currentTimeMillis()-startTime);
-        System.out.println("Required_time"+endtime);
-        System.out.println("Seed "+seed);
-        System.out.println("Best cost "+BestCost);
-        System.out.println("Route: "+Best_Route);
-
+        g.setCurrentBestResult(BestCost,Best_Route);
         return g;
 
 
@@ -125,9 +155,9 @@ public class Ls1 {
 
 
 
-    public static Graph createRandomRoute(Graph g, int seed){
+    public static List<Integer> createRandomRoute(Graph g, int seed){
         int cityCount = g.getMatrix().length;
-        int[][] cityMatrix = g.getMatrix();
+        //int[][] cityMatrix = g.getMatrix();
         ArrayList<Integer> currentRoute = new ArrayList<Integer>();
         int cost;
         int starting_point=0;
@@ -151,10 +181,11 @@ public class Ls1 {
 
 
         currentRoute.add(starting_point);
-        //System.out.println("Initial route: "+currentRoute);
+
         cost = GraphUtils.calculateCost(g, currentRoute);
-        g.setCurrentBestResult(cost, currentRoute);
-        return g;
+        currentRoute.add(cost);
+
+        return currentRoute;
     }
 
 
@@ -247,7 +278,7 @@ public class Ls1 {
 
 
 
-    public static List<Integer> ThreeOpt(Graph g, int overall_best_cost ,int edge1, int edge2, int edge3)
+    public static List<Integer> ThreeOpt(Graph g,List<Integer> Initial_route ,int Current_cost,int overall_best_cost ,int edge1, int edge2, int edge3)
     {
         int cost_for_first_seg=0;
         int cost_for_second_seg=0;
@@ -255,10 +286,10 @@ public class Ls1 {
         int cost_for_fourth_seg=0;
 
         //Input current route and cost
-        int current_best_cost = g.getCurrentBestCost();//Cost of ABCD
+        int current_best_cost = Current_cost;//Cost of ABCD
         int all_best_cost=overall_best_cost;
-        List<Integer> route = new ArrayList<Integer>();
-        route=g.getCurrentBestRoutes();
+        List<Integer> route = new ArrayList(Initial_route);
+
 
         int dummy_for_cost=0;
         int dummy_for_cost_2=0;
@@ -394,14 +425,16 @@ public class Ls1 {
 
         else
         {
-            Best_route=Best_combination(route,best_index,edge1,edge2,edge3);
+            Best_route=new ArrayList<>(Best_combination(route,best_index,edge1,edge2,edge3));
             Best_route.add(all_best_cost);
-            //System.out.println("Best_index"+best_index);
+
 
         }
+
 
         return Best_route;
     }
 
 
 }
+

@@ -11,8 +11,8 @@ Team members:
 
 -------------
 
-This is a program to solve traveling salesman problem (TSP) using 5 different kinds of algorithm, 
-including Branch and Bound, Approximation, and Local Search.
+This is a program to solve traveling salesman problem (TSP) using 4 different kinds of algorithm, 
+including Branch and Bound, Approximation, and 2 Local Search.
 
 ## Folder Structure
 
@@ -37,6 +37,8 @@ including Branch and Bound, Approximation, and Local Search.
 
 ├── data        # TSP data
 
+├── results		# results of output file
+
 └── README.md    
 
 ## Compilation & Experiment
@@ -60,14 +62,11 @@ java Main -inst ../data/Cincinnati.tsp -alg BnB -time 600
 ```
 
 * Please make sure you are in *src* folder. 
-* We will support BnB, Approx, LS1, LS2 alg command options in the end.
+* The output *results* folder should appear under *src* folder.
 
 ## Compute function structure
 
 -------------
-
-* Please refer to the function in package bnb/Bnb.java to see the structure. 
-
 * Please maintain a public and static function called 
 *compute* in each algorithm. 
 
@@ -76,12 +75,12 @@ java Main -inst ../data/Cincinnati.tsp -alg BnB -time 600
 ```
 // timeStamp is the second from the program start till now
 // Ex: approxCost = 13155, timeStamp = 110
-// Means after runngin 110 seconds, the algorithm found a route cost 13155
+// Means after running 110 seconds, the algorithm found a route cost 13155
 graph.addApproxResult(int apporxCost, double timeStamp))  
 
-// The routes may start from "0", ex "0->1->5->4->3->2->0", or you may not!
-// The routes go back to origin ex "0->1->5->4->3->2->0"
-graph.setCurrentBestResult(int cost, List<Integer> routes) // routes.size() may not = # of nodes
+// The routes may start from "0", ex "0->1->5->4->3->2->0", but that is not a must!
+// The routes go back to origin ex "0->1->5->4->3->2->0", or "5->4->3->2->0->1->5"
+graph.setCurrentBestResult(int cost, List<Integer> routes) // routes.size()  != # of nodes, but = # of nodes (cities) + 1
 ```
 
 ## Related Links for Analysis and Report Generation
