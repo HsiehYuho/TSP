@@ -22,6 +22,7 @@ public class Ls1 {
     public static int Mode=0;
     public static Graph compute(Graph g, int cutTime, int seed)
     {
+        // For test git push
 
         int count=0;
         int cityCount=g.getMatrix().length;
