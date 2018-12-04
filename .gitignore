@@ -1,4 +1,4 @@
-TSP.iml
+*.iml
 out/*
 .idea/*
 *.class
