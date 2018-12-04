@@ -13,6 +13,8 @@ public class InitialRouteUtils {
         ArrayList<Integer> currentRoute = new ArrayList<Integer>();
         int cost;
         Random rn = new Random(seed);
+        // Setting the starting point as 0 to maintain consistency in the solutions across instances
+        // since the starting point would not effect the solution given that TSP is a cycle
         currentRoute.add(0);
         while(currentRoute.size() < cityCount){
             int city = rn.nextInt(cityCount - 1) + 1;

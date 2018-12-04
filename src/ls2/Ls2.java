@@ -24,29 +24,27 @@ public class Ls2 {
         int difference=0;
         int flag = 0;
         long startTime = System.currentTimeMillis();
-        while((System.currentTimeMillis() - startTime)/1000 < cutTime && (difference<1000)){
+        while((System.currentTimeMillis() - startTime)/1000.00 < cutTime && (difference<1000)) {
             currentCost = g.getCurrentBestCost();
-            for(int j=1; j < cityCount -1; j++ ){
-                for(int k =j+1; k< cityCount; k++){
+            for (int j = 1; j < cityCount - 1; j++) {
+                for (int k = j + 1; k < cityCount; k++) {
                     List<Integer> alternateRoute = twoOptSwap(g, j, k);
                     int alternateCost = GraphUtils.calculateCost(g, alternateRoute);
-                    if(alternateCost < currentCost){
-                        difference=0;
+                    if (alternateCost < currentCost) {
+                        difference = 0;
                         g.setCurrentBestResult(alternateCost, alternateRoute);
+                        g.addApproxResult(alternateCost, (System.currentTimeMillis() - startTime) / 1000.00);
                         flag = 1;
                         break;
                     }
                 }
-                if(flag == 1){
+                if (flag == 1) {
                     flag = 0;
                     break;
                 }
             }
             difference++;
         }
-        System.out.println(System.currentTimeMillis() - startTime);
-        System.out.println("Proposed Route: " + g.getCurrentBestRoutes());
-        System.out.println("Cost: "+ g.getCurrentBestCost());
         return g;
     }
     public static  List<Integer> twoOptSwap(Graph g, int j, int k){
