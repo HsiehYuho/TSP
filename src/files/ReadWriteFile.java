@@ -190,9 +190,9 @@ public class ReadWriteFile {
             System.out.printf("Cannot find any cost \n");
 
         }
-        // Minus 1 because we do not want to output duplicate ID 
+        // Minus 1 because we do not want to output duplicate ID
         for(int i = 0; i < knownBestRoutes.size() - 1; i++){
-            int id = knownBestRoutes.get(i) - 1;
+            int id = knownBestRoutes.get(i) + 1;
             solPw.print(id);
             if(i != knownBestRoutes.size() - 1){
                 solPw.print(",");
